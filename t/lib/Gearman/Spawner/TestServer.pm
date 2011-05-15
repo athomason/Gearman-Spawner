@@ -45,6 +45,9 @@ sub fork_gearmand {
         Reuse     => 1,
         Listen    => 1,
     );
+
+    $sock or die "failed to request a listening socket: $!";
+
     my $port = $sock->sockport;
     my $host = $sock->sockhost;
     my $address = "$host:$port";
@@ -62,7 +65,7 @@ sub fork_gearmand {
             return ($address, $pid) if $sock;
             select undef, undef, undef, 0.1;
         }
-        die "couldn't contact server: $!";
+        die "couldn't contact server at $host:$port: $!";
     }
 
     require Gearman::Util; # Gearman::Server doesn't itself

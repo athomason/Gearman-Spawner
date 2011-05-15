@@ -9,6 +9,7 @@ WriteMakefile(
         'Gearman::Client'           => 1.11,
         'Gearman::Client::Async'    => 0.94,
         'Gearman::Server'           => 1.11,
+        'IO::Socket::INET'          => 1.31,
         'POSIX'                     => 0,
         'Storable'                  => 0,
     },

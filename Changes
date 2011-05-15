@@ -1,3 +1,5 @@
 Revision history for Perl extension Gearman::Spawner
+1.01 Sun May 15 14:58:48 PDT 2011
+    - Add verbosity for failed test port selection
 1.00 Fri May 13 16:17:22 PDT 2011
     - Initial revision

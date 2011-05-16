@@ -43,6 +43,7 @@ sub fork_gearmand {
         Type      => SOCK_STREAM,
         Proto     => 'tcp',
         Reuse     => 1,
+        LocalHost => 'localhost',
         Listen    => 1,
     );
 

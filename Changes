@@ -1,4 +1,6 @@
 Revision history for Perl extension Gearman::Spawner
+1.03 Mon May 16 16:41:47 PDT 2011
+    - Make client libs optional
 1.02 Sun May 15 21:33:52 PDT 2011
     - Bind test server to localhost
 1.01 Sun May 15 14:58:48 PDT 2011

@@ -5,7 +5,7 @@ use warnings;
 
 use 5.10.0;
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 use Carp qw( croak );
 use Gearman::Spawner::Supervisor;

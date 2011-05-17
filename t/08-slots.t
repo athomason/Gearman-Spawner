@@ -7,7 +7,7 @@ use FindBin '$Bin';
 use lib "$Bin/lib";
 
 use Gearman::Spawner;
-use Gearman::Spawner::TestServer;
+use Gearman::Spawner::Server;
 use IO::Socket::INET;
 
 if (eval "use Gearman::Spawner::Client::Async; 1") {
@@ -17,7 +17,7 @@ else {
     plan skip_all => 'asynchronous client not available';
 }
 
-my $server = Gearman::Spawner::TestServer->address;
+my $server = Gearman::Spawner::Server->address;
 
 my $number = 10;
 

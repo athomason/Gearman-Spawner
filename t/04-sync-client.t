@@ -5,7 +5,7 @@ use FindBin '$Bin';
 use lib "$Bin/lib";
 
 use Gearman::Spawner;
-use Gearman::Spawner::TestServer;
+use Gearman::Spawner::Server;
 use Test::More;
 
 if (eval "use Gearman::Spawner::Client::Sync; 1") {
@@ -17,7 +17,7 @@ else {
 
 my $class = 'MethodWorker';
 
-my $server = Gearman::Spawner::TestServer->address;
+my $server = Gearman::Spawner::Server->address;
 
 my $left_hand = 3;
 my $right_hand = 5;

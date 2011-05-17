@@ -1,4 +1,4 @@
-package Gearman::Spawner::TestServer;
+package Gearman::Spawner::Server;
 
 use strict;
 use warnings;
@@ -26,7 +26,7 @@ sub create {
         die "need server to test against; either set GEARMAN_SERVER or install Gearman::Server\n";
     }
 
-    return Gearman::Spawner::TestServer::Instance->new($class->fork_gearmand());
+    return Gearman::Spawner::Server::Instance->new($class->fork_gearmand());
 }
 
 # start up a gearmand that exits when its parent process does. returns the
@@ -76,7 +76,7 @@ sub fork_gearmand {
     $class->loop;
 }
 
-package Gearman::Spawner::TestServer::Instance;
+package Gearman::Spawner::Server::Instance;
 
 use strict;
 use warnings;

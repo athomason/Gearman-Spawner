@@ -6,6 +6,7 @@ lib/Gearman/Spawner/Client/AnyEvent.pm
 lib/Gearman/Spawner/Client/Async.pm
 lib/Gearman/Spawner/Client/Sync.pm
 lib/Gearman/Spawner/Process.pm
+lib/Gearman/Spawner/Server.pm
 lib/Gearman/Spawner/Supervisor.pm
 lib/Gearman/Spawner/Util.pm
 lib/Gearman/Spawner/Worker.pm
@@ -23,7 +24,6 @@ t/05-async-client.t
 t/06-anyevent-client.t
 t/07-errors.t
 t/08-slots.t
-t/lib/Gearman/Spawner/TestServer.pm
 t/lib/BadImportWorker.pm
 t/lib/CompileErrorWorker.pm
 t/lib/MethodWorker.pm

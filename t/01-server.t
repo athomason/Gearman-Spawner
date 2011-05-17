@@ -6,10 +6,10 @@ use Test::More tests => 2;
 use FindBin '$Bin';
 use lib "$Bin/lib";
 
-use Gearman::Spawner::TestServer;
+use Gearman::Spawner::Server;
 use IO::Socket::INET;
 
-my $server = Gearman::Spawner::TestServer->create;
+my $server = Gearman::Spawner::Server->create;
 my $address = $server->address;
 ok($server, "server created: $address");
 

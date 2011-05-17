@@ -7,13 +7,13 @@ use FindBin '$Bin';
 use lib "$Bin/lib";
 
 use Gearman::Spawner;
-use Gearman::Spawner::TestServer;
+use Gearman::Spawner::Server;
 use IO::Socket::INET;
 
 my $class = 'MethodWorker';
 
 my $spawner = Gearman::Spawner->new(
-    servers => [Gearman::Spawner::TestServer->address],
+    servers => [Gearman::Spawner::Server->address],
     workers => { },
 );
 

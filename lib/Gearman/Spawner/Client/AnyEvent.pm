@@ -47,6 +47,12 @@ sub run_method {
         };
     }
 
+    if (my $cb = delete $options->{on_fail}) {
+        $options->{on_complete} = sub {
+            $cb->($_[1]);
+        };
+    }
+
     my $serialized = nfreeze([$arg]);
     $self->add_task($function, $serialized, %$options);
 }

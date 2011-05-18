@@ -5,7 +5,7 @@ use FindBin '$Bin';
 use lib "$Bin/lib";
 
 use Test::More;
-my $num_tests = 19;
+my $num_tests = 21;
 
 if (eval "use Gearman::Spawner::Client::AnyEvent; use AnyEvent; 1") {
     plan tests => $num_tests;
@@ -70,5 +70,26 @@ $client->run_method(
 is(scalar keys %{ $client->{cancel_timers} }, 1, 'timer is live');
 $cv2->recv;
 is(scalar keys %{ $client->{cancel_timers} }, 0, 'timer is dead');
+
+# make sure timeout doesn't fire on successful job
+my $cv3 = AnyEvent->condvar;
+my $timer = AnyEvent->timer(after => 0.5, cb => sub { $cv3->send });
+my $success;
+my $timeout_fired;
+$client->run_method(
+    class => 'MethodWorker',
+    method => 'constant',
+    success_cb => sub {
+        $success++;
+    },
+    error_cb => sub {
+        my $err = shift;
+        $timeout_fired++ if $err =~ /timeout/;
+    },
+    timeout => 0.25,
+);
+$cv3->recv;
+ok($success, "job succeeded");
+ok(!$timeout_fired, "timeout on successful job didn't fire");
 
 }

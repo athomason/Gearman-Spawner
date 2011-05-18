@@ -126,10 +126,14 @@ sub run_method {
     my $serialized = nfreeze([$data]);
 
     my $timer;
+    my $cancel_timeout;
     if (defined $timeout) {
-        $timer = AE::timer($timeout, 0, sub {
+        $cancel_timeout = sub {
             delete $self->{cancel_timers}{"$timer"};
             undef $timer;
+        };
+        $timer = AE::timer($timeout, 0, sub {
+            $cancel_timeout->();
             $error_cb->("timeout");
         });
         $self->{cancel_timers}{"$timer"} = $timer;
@@ -139,6 +143,7 @@ sub run_method {
 
     $callbacks{on_complete} = sub {
         return if defined $timeout && !$timer; # timeout already fired
+        $cancel_timeout->() if $cancel_timeout;
 
         my ($task, $frozen_retval) = @_;
 
@@ -160,6 +165,7 @@ sub run_method {
     $callbacks{on_fail} = sub {
         return if defined $timeout && !$timer; # timeout already fired
         my ($task, $reason) = @_;
+        $cancel_timeout->() if $cancel_timeout;
         $error_cb->($reason);
     };
 

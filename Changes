@@ -1,4 +1,6 @@
 Revision history for Perl extension Gearman::Spawner
+1.06 Tue May 17 23:37:50 PDT 2011
+    - AnyEvent client: Make sure timeout doesn't fire after other callback has fired
 1.05 Tue May 17 19:58:27 PDT 2011
     - Make client APIs similar and based on named-parameters
     - Document client interfaces

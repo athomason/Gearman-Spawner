@@ -24,7 +24,10 @@ t/05-async-client.t
 t/06-anyevent-client.t
 t/07-errors.t
 t/08-slots.t
+t/09-respawn.t
 t/lib/BadImportWorker.pm
+t/lib/ClientTest.pm
 t/lib/CompileErrorWorker.pm
+t/lib/CountWorker.pm
 t/lib/MethodWorker.pm
 t/lib/SlotWorker.pm

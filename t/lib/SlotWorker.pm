@@ -16,6 +16,7 @@ sub new {
 
 sub slot {
     my SlotWorker $self = shift;
+    # wait to make sure this worker doesn't return to handle another job
     sleep 1;
     return $self->{slot};
 }

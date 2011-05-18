@@ -23,7 +23,7 @@ sub create {
     my $class = shift;
 
     unless (eval "require Gearman::Server; 1") {
-        die "need server to test against; either set GEARMAN_SERVER or install Gearman::Server\n";
+        die "need server to run against; either set GEARMAN_SERVER or install Gearman::Server\n";
     }
 
     return Gearman::Spawner::Server::Instance->new($class->fork_gearmand());

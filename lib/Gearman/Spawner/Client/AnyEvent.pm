@@ -104,6 +104,10 @@ be serialized with Storable is allowed. If omitted, undef is sent.
 I<error_cb> will be called. Even if the job subsequently completes,
 I<success_cb> will not be called.
 
+=item unique
+
+(Optional) The opaque unique tag for coalescing jobs.
+
 =back
 
 =cut

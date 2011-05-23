@@ -118,6 +118,7 @@ sub run_method {
     my $error_cb    = delete $params{error_cb}      || croak "need error_cb";
     my $data        = delete $params{data}          || undef;
     my $timeout     = delete $params{timeout}       || undef;
+    my $unique      = delete $params{unique}        || undef;
 
     croak "unknown parameters to run_method: %params" if %params;
 
@@ -139,9 +140,11 @@ sub run_method {
         $self->{cancel_timers}{"$timer"} = $timer;
     }
 
-    my %callbacks;
+    my %options;
 
-    $callbacks{on_complete} = sub {
+    $options{unique} = $unique if defined $unique;
+
+    $options{on_complete} = sub {
         return if defined $timeout && !$timer; # timeout already fired
         $cancel_timeout->() if $cancel_timeout;
 
@@ -162,14 +165,14 @@ sub run_method {
         $success_cb->(@$rets);
     };
 
-    $callbacks{on_fail} = sub {
+    $options{on_fail} = sub {
         return if defined $timeout && !$timer; # timeout already fired
         my ($task, $reason) = @_;
         $cancel_timeout->() if $cancel_timeout;
         $error_cb->($reason);
     };
 
-    $self->add_task($function, $serialized, %callbacks);
+    $self->add_task($function, $serialized, %options);
 }
 
 =item run_method_background

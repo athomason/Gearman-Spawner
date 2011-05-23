@@ -1,4 +1,6 @@
 Revision history for Perl extension Gearman::Spawner
+1.07  Mon May 23 16:15:13 PDT 2011
+    - Pass 'unique' option through
 1.06 Tue May 17 23:37:50 PDT 2011
     - AnyEvent client: Make sure timeout doesn't fire after other callback has fired
 1.05 Tue May 17 19:58:27 PDT 2011

@@ -1,4 +1,4 @@
-Gearman-Spawner version 1.06
+Gearman-Spawner version 1.07
 ============================
 
 The README is used to introduce the module and provide instructions on
@@ -25,7 +25,7 @@ COPYRIGHT AND LICENCE
 
 Put the correct copyright and licence information here.
 
-Copyright (C) 2010 by Six Apart, Ltd.
+Copyright (C) 2011 by Say Media Inc
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.5 or,

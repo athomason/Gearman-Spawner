@@ -124,7 +124,7 @@ sub run_method {
     my $timeout     = delete $params{timeout}       || undef;
     my $unique      = delete $params{unique}        || undef;
 
-    croak "unknown parameters to run_method: %params" if %params;
+    croak "unknown parameters to run_method: @{[%params]}" if %params;
 
     my $function = Gearman::Spawner::Util::method2function($class, $method);
 
@@ -217,7 +217,7 @@ sub run_method_background {
     my $data        = delete $params{data}          || undef;
     my $unique      = delete $params{unique}        || undef;
 
-    croak "unknown parameters to run_method_background: %params" if %params;
+    croak "unknown parameters to run_method_background: @{[%params]}" if %params;
 
     my $function = Gearman::Spawner::Util::method2function($class, $method);
 

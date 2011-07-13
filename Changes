@@ -1,4 +1,8 @@
 Revision history for Perl extension Gearman::Spawner
+1.09  Wed Jul 13 13:56:02 PDT 2011
+    - Add unique support for background tasks
+1.08  Mon May 23 16:15:13 PDT 2011
+    - Pass 'unique' option through
 1.07  Mon May 23 16:15:13 PDT 2011
     - Pass 'unique' option through
 1.06 Tue May 17 23:37:50 PDT 2011

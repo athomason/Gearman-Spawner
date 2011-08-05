@@ -133,7 +133,7 @@ sub run_method {
     my %options;
 
     $options{timeout} = $timeout if defined $timeout;
-    $options{unique}  = $unique  if defined $unique;
+    $options{uniq}    = $unique  if defined $unique;
 
     $options{on_complete} = sub {
         my $ref_to_frozen_retval = shift;
@@ -206,7 +206,7 @@ sub run_method_background {
     croak "unknown parameters to run_method_background: @{[%params]}" if %params;
 
     my %options;
-    $options{unique}  = $unique  if defined $unique;
+    $options{uniq} = $unique if defined $unique;
 
     my $function = Gearman::Spawner::Util::method2function($class, $method);
 

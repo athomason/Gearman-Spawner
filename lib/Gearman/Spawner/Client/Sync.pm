@@ -104,7 +104,7 @@ sub run_method {
     croak "unknown parameters to run_method: @{[%params]}" if %params;
 
     my %options;
-    $options{unique} = $unique if defined $unique;
+    $options{uniq} = $unique if defined $unique;
 
     my $function = Gearman::Spawner::Util::method2function($class, $method);
 
@@ -176,7 +176,7 @@ sub run_method_background {
     my $serialized = nfreeze([$data]);
 
     my %options;
-    $options{unique} = $unique if defined $unique;
+    $options{uniq} = $unique if defined $unique;
 
     $self->dispatch_background($function => $serialized, \%options);
 

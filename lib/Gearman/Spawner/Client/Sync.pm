@@ -84,6 +84,10 @@ Options:
 (Optional) The job-specific data to pass to the worker. Any structure that can
 be serialized with Storable is allowed. If omitted, undef is sent.
 
+=item unique
+
+(Optional) The opaque unique tag for coalescing jobs.
+
 =back
 
 =cut
@@ -95,14 +99,18 @@ sub run_method {
     my $class       = delete $params{class}         || croak "need class";
     my $method      = delete $params{method}        || croak "need method";
     my $data        = delete $params{data}          || undef;
+    my $unique      = delete $params{unique}        || undef;
 
     croak "unknown parameters to run_method: @{[%params]}" if %params;
+
+    my %options;
+    $options{unique} = $unique if defined $unique;
 
     my $function = Gearman::Spawner::Util::method2function($class, $method);
 
     my $serialized = nfreeze([$data]);
 
-    my $ref_to_frozen_retval = $self->do_task($function => $serialized);
+    my $ref_to_frozen_retval = $self->do_task($function => $serialized, \%options);
 
     unless (defined $ref_to_frozen_retval) {
         die 'no return value from worker';
@@ -123,6 +131,35 @@ sub run_method {
     return wantarray ? @$rets : $rets->[0];
 }
 
+=item run_method_background
+
+Dispatches a background job to a worker.
+
+Options:
+
+=over 4
+
+=item class
+
+(Required) The name of the worker class.
+
+=item method
+
+(Required) The name of the method in I<class> to call.
+
+=item data
+
+(Optional) The job-specific data to pass to the worker. Any structure that can
+be serialized with Storable is allowed. If omitted, undef is sent.
+
+=item unique
+
+(Optional) The opaque unique tag for coalescing jobs.
+
+=back
+
+=cut
+
 sub run_method_background {
     my Gearman::Spawner::Client::Sync $self = shift;
     my %params = @_;
@@ -130,6 +167,7 @@ sub run_method_background {
     my $class       = delete $params{class}         || croak "need class";
     my $method      = delete $params{method}        || croak "need method";
     my $data        = delete $params{data}          || undef;
+    my $unique      = delete $params{unique}        || undef;
 
     croak "unknown parameters to run_method: @{[%params]}" if %params;
 
@@ -137,7 +175,10 @@ sub run_method_background {
 
     my $serialized = nfreeze([$data]);
 
-    $self->dispatch_background($function => $serialized);
+    my %options;
+    $options{unique} = $unique if defined $unique;
+
+    $self->dispatch_background($function => $serialized, \%options);
 
     return;
 }

@@ -104,6 +104,10 @@ be serialized with Storable is allowed. If omitted, undef is sent.
 I<error_cb> will be called. Even if the job subsequently completes,
 I<success_cb> will not be called.
 
+=item unique
+
+(Optional) The opaque unique tag for coalescing jobs.
+
 =back
 
 =cut
@@ -118,6 +122,7 @@ sub run_method {
     my $error_cb    = delete $params{error_cb}      || croak "need error_cb";
     my $data        = delete $params{data}          || undef;
     my $timeout     = delete $params{timeout}       || undef;
+    my $unique      = delete $params{unique}        || undef;
 
     croak "unknown parameters to run_method: @{[%params]}" if %params;
 
@@ -128,6 +133,7 @@ sub run_method {
     my %options;
 
     $options{timeout} = $timeout if defined $timeout;
+    $options{unique}  = $unique  if defined $unique;
 
     $options{on_complete} = sub {
         my $ref_to_frozen_retval = shift;
@@ -180,6 +186,10 @@ Options:
 (Optional) The job-specific data to pass to the worker. Any structure that can
 be serialized with Storable is allowed. If omitted, undef is sent.
 
+=item unique
+
+(Optional) The opaque unique tag for coalescing jobs.
+
 =back
 
 =cut
@@ -191,13 +201,20 @@ sub run_method_background {
     my $class       = delete $params{class}         || croak "need class";
     my $method      = delete $params{method}        || croak "need method";
     my $data        = delete $params{data}          || undef;
+    my $unique      = delete $params{unique}        || undef;
 
     croak "unknown parameters to run_method_background: @{[%params]}" if %params;
+
+    my %options;
+    $options{unique}  = $unique  if defined $unique;
 
     my $function = Gearman::Spawner::Util::method2function($class, $method);
 
     my $serialized = nfreeze([$data]);
-    $self->dispatch_background($function => \$serialized);
+
+    # XXX dispatch_background does not exist in Gearman::Client::Async
+    croak "dispatch_background is not supported by Async client";
+    $self->dispatch_background($function => \$serialized, \%options);
 
     return;
 }

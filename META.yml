@@ -18,7 +18,7 @@ no_index:
     - inc
     - t
 recommends:
-  Gearman::Client: 1.10
+  Gearman::Client: 1.11
   Gearman::Client::Async: 0.94
 requires:
   Carp: 0

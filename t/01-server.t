@@ -5,6 +5,7 @@ use Test::More tests => 2;
 
 use FindBin '$Bin';
 use lib "$Bin/lib";
+use lib "$Bin/../lib";
 
 use Gearman::Spawner::Server;
 use IO::Socket::INET;

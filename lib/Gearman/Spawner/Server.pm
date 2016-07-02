@@ -5,6 +5,7 @@ use warnings;
 
 use Gearman::Spawner::Process;
 use IO::Socket::INET;
+use IO::Handle ();
 
 use base 'Gearman::Spawner::Process';
 
@@ -32,48 +33,45 @@ sub create {
 # start up a gearmand that exits when its parent process does. returns the
 # address of the listening server and its pid
 sub fork_gearmand {
-    my $class = shift;
-
-    # NB: this relies on Gearman::Spawner::Process allowing use of fork,
+	my $class = shift;
+    
+	# NB: this relies on Gearman::Spawner::Process allowing use of fork,
     # run_periodically, exit_with_parent, and loop as class methods instead of
     # object methods
 
-    # get an unused port from the OS
-    my $sock = IO::Socket::INET->new(
-        Type      => SOCK_STREAM,
-        Proto     => 'tcp',
-        Reuse     => 1,
-        LocalHost => 'localhost',
-        Listen    => 1,
-    );
+	pipe(my $piperead, my $pipewrite); # open pipe so child can communicate with me, because i'm the parent
+	$pipewrite->autoflush(1);
 
-    $sock or die "failed to request a listening socket: $!";
+	$Gearman::Spawner::Process::CHECK_PERIOD = 0.5;
+	my $proc_name = $0;
+	my $pid = $class->fork("[Gearman::Server] $0", 1);
 
-    my $port = $sock->sockport;
-    my $host = $sock->sockhost;
-    my $address = "$host:$port";
-    $sock->close;
-
-    my $parent_pid = $$;
-
-    $Gearman::Spawner::Process::CHECK_PERIOD = 0.5;
-    my $pid = $class->fork("[Gearman::Server $address] $0", 1);
-
-    if ($pid) {
+    if ($pid) { # parent
+		close $pipewrite;
+		# wait for the child to announce the address
+		chomp(my $address = <$piperead>);
+		close $piperead;
         # wait until server is contactable
         for (1 .. 50) {
             my $sock = IO::Socket::INET->new($address);
             return ($address, $pid) if $sock;
             select undef, undef, undef, 0.1;
         }
-        die "couldn't contact server at $host:$port: $!";
-    }
+        die "couldn't contact server at $address: $!";
+    } else { # child
+		close $piperead;
 
-    require Gearman::Util; # Gearman::Server doesn't itself
-    my $server = Gearman::Server->new;
-    $server->create_listening_sock($port);
+		require Gearman::Util; # Gearman::Server doesn't itself
+		my $server = Gearman::Server->new;
+		my $sock = $server->create_listening_sock;
 
-    $class->loop;
+		my $address = $sock->sockhost.":".$sock->sockport;
+		$0 = "[Gearman::Server $address] $proc_name"; # set child name again
+		print $pipewrite $address;
+		close $pipewrite;
+		
+		$class->loop;
+	}
 }
 
 package Gearman::Spawner::Server::Instance;

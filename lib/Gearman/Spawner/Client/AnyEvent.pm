@@ -169,7 +169,7 @@ sub run_method {
         $success_cb->(@$rets);
     };
 
-    $options{on_fail} = sub {
+    $options{on_exception} = $options{on_fail} = sub {
         return if defined $timeout && !$timer; # timeout already fired
         my ($task, $reason) = @_;
         $cancel_timeout->() if $cancel_timeout;
